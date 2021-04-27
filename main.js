@@ -90,7 +90,7 @@ function startApp() {
 
 
 function viewEmployeesByDepartment() {
-    var query = ` SELECT employees.id,employees.first_name, employees.last_name, role.title, departments.name AS department, role.salary, CONACT(manager.first_name, ' ', manager.last_name) AS Manager FROM employees LEFT JOIN role on employees.role_ID = role.id LEFT JOIN departments on role.department_ID = departments.id LEFT JOIN employees manager on manager.id = employees.manager_ID;`;
+    var query = `SELECT departments.name AS department, employees.id, employees.first_name, employees.last_name, role.title FROM employees LEFT JOIN role on employees.role_ID = role.id LEFT JOIN departments departments on role.department_ID = departments.id WHERE departments.id;`;
     connection.query(query, function (err, query) {
         console.table(query); //displays a table with the above data (employees, department, role & salary)
         startApp();
@@ -99,17 +99,37 @@ function viewEmployeesByDepartment() {
 }
 
 function viewEmployees() {
-
+    var query = ` SELECT employees.id,employees.first_name, employees.last_name, role.title, departments.name AS department, role.salary, CONACT(manager.first_name, ' ', manager.last_name) AS Manager FROM employees LEFT JOIN role on employees.role_ID = role.id LEFT JOIN departments on role.department_ID = departments.id LEFT JOIN employees manager on manager.id = employees.manager_ID;`;
+    connection.query(query, function (err, query) {
+        console.table(query); //displays a table with the above data (employees, department, role & salary)
+        startApp();
+    })
 }
 
 function viewDepartment() {
-
+    var query = `SELECT id AS department_ID, name AS departments from departments;`;
+    connection.query(query, function (err, query) {
+        console.table(query); //displays a table with the above data (employees, department, role & salary)
+        startApp();
+    })
 }
 
 function viewRoles() {
+    var query = `SELECT id AS role_ID, title, salary, salary AS salaries from role;`;
+    connection.query(query, function (err, query) {
+        console.table(query); //displays a table with the above data (employees, department, role & salary)
+        startApp();
+    })
 
 }
 
 function addEmployee() {
+    connection.query("SELECT * FROM role", () => (err, resRole) => {
+        if (err) throw err;
+        for (let i = 0; i < array.length; i++) {
+            const element = array[i];
+            
+        }
+    })
 
 }
