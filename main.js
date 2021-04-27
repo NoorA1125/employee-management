@@ -124,11 +124,12 @@ function viewRoles() {
 }
 
 function addEmployee() {
+    var roleChoice = []; //prompt role choices
     connection.query("SELECT * FROM role", () => (err, resRole) => {
         if (err) throw err;
-        for (let i = 0; i < array.length; i++) {
-            const element = array[i];
-            
+        for (var i = 0; i < resRole.length; i++) {
+            var roleList = resRole[i].name;
+            roleChoice.push(roleList) //adding roles to the empty array
         }
     })
 
