@@ -34,7 +34,19 @@ function startApp() {
             name: "action",
             type: "rawlist",
             message: "Hi there, what would you like to do?",
-            choices: []
+            choices: [
+                "View All Employees",
+                "View All Employees By Department",
+                "View  Departments",
+                "View Roles",
+                "Add Department",
+                "Add Role",
+                "Add Employee",
+                "Remove Employee", /*BONUS */
+                "Update Employee Role",
+                "Update Employee Manager",/*BONUS */
+                "Exit"
+            ]
         })
         .then(function (answer) {
             switch (key) {
