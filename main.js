@@ -29,3 +29,13 @@ connection.connect( ()=> (err) => {
     if(err) throw err;
     startApp();
 });
+
+function startApp() {
+    inquirer
+    .prompt({
+        name: "action",
+        type: "rawlist",
+        message: "Hi there, what would you like to do?",
+        choices:[]
+    })
+}
