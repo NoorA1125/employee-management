@@ -1,6 +1,5 @@
 USE employeeDB;
 
-
 /*Departments*/
 INSERT INTO departments(name) VALUES
 ("Finance"),

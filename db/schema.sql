@@ -1,4 +1,10 @@
 /*caps not mandatory but helps with readability */
+ -- Add departments, roles, employees
+
+ -- View departments, roles, employees
+
+ -- Update employee roles
+
 DROP DATABASE IF EXISTS employeeDB; /*Never in real practice */
 CREATE DATABASE employeeDB;
 
@@ -13,9 +19,9 @@ CREATE TABLE departments (
 
 CREATE TABLE role (
     id INT AUTO_INCREMENT NOT NULL, 
-    title VARCHAR(30) NULL,
-    salary DECIMAL(10,2) NULL,
-    department_ID INT NOT NULL,
+    title VARCHAR(30) NULL, --to hold role title
+    salary DECIMAL(10,2) NULL, --to hold role salary
+    department_ID INT NOT NULL, -- to hold reference to department role belongs
     PRIMARY KEY (id),
     FOREIGN KEY (department_ID) REFERENCES departments(id)
 );
