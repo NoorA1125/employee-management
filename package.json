@@ -1,1 +1,13 @@
-{}
+{
+  "name": "employee-management",
+  "description": "A system to manage your employees",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Noor Abdikadir",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1"
+  }
+}
