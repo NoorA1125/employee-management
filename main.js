@@ -53,8 +53,9 @@ function startApp() {
 
 function viewEmployeesByDepartment() {
     var query = ` SELECT employees.id,employees.first_name, employees.last_name, role.title, departments.name AS department, role.salary, CONACT(manager.first_name, ' ', manager.last_name) AS Manager FROM employees LEFT JOIN role on employees.role_ID = role.id LEFT JOIN departments on role.department_ID = departments.id LEFT JOIN employees manager on manager.id = employees.manager_ID;`;
-    connection.query(query, function(err,query)) = ({
-
+    connection.query(query, function (err, query) {
+        console.table(query); //displats a table with the above data (employees, department, role & salary)
+        startApp();
     })
 
 }
