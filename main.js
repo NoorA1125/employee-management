@@ -49,13 +49,41 @@ function startApp() {
             ]
         })
         .then(function (answer) {
-            switch (key) {
-                case value:
-
+            switch (answer.action) {
+                case "View All Employees":
+                    viewEmployees();
+                    break;
+                case "View All Employees By Department":
+                    viewEmployees();
+                    break;
+                case "View Departments":
+                    viewEmployees();
+                    break;
+                case "View Roles":
+                    viewEmployees();
+                    break;
+                case "Add Employee":
+                    viewEmployees();
+                    break;
+                case "Add Department":
+                    AddDepartment();
+                    break;
+                case "Add Role":
+                    addRole();
+                    break;
+                case "Remove Employee":
+                    removeEmployee();
+                    break;
+                case "Update Employee Role":
+                    updateEmployeeRole();
+                    break;
+                case "Update Employee Manager":
+                    updateEmployeeManagement();
                     break;
 
-                default:
-                    break;
+                case "Exit":
+                    console.log("Thanks for using our Employee Management System!")
+                    process.exit();
             }
         })
 }
@@ -64,7 +92,7 @@ function startApp() {
 function viewEmployeesByDepartment() {
     var query = ` SELECT employees.id,employees.first_name, employees.last_name, role.title, departments.name AS department, role.salary, CONACT(manager.first_name, ' ', manager.last_name) AS Manager FROM employees LEFT JOIN role on employees.role_ID = role.id LEFT JOIN departments on role.department_ID = departments.id LEFT JOIN employees manager on manager.id = employees.manager_ID;`;
     connection.query(query, function (err, query) {
-        console.table(query); //displats a table with the above data (employees, department, role & salary)
+        console.table(query); //displays a table with the above data (employees, department, role & salary)
         startApp();
     })
 
