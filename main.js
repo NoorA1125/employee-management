@@ -49,3 +49,24 @@ function startApp() {
         }
     })
 }
+
+
+function viewEmployeesByDepartment(){
+    
+}
+
+function viewEmployees(){
+
+}
+
+function viewDepartment(){
+    
+}
+
+function viewRoles(){
+    
+}
+
+function addEmployee(){
+
+}
