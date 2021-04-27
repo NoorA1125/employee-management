@@ -4,6 +4,7 @@ CREATE DATABASE employeeDB;
 
 USE employeeDB;
 
+
 CREATE TABLE departments (
     id INT AUTO_INCREMENT NOT NULL, 
     name VARCHAR(30) NULL,
@@ -20,5 +21,12 @@ CREATE TABLE role (
 );
 
 CREATE TABLE employees (
-    
+    id INT AUTO_INCREMENT NOT NULL, 
+    first_name VARCHAR(30) NULL,
+    last_name VARCHAR(30) NULL,
+    role_ID INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (department_ID) REFERENCES departments(id),
+    FOREIGN KEY (role_ID) REFERENCES role(id),
+    FOREIGN KEY (manager_ID) REFERENCES employees(id)
 )
