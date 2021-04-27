@@ -38,4 +38,14 @@ function startApp() {
         message: "Hi there, what would you like to do?",
         choices:[]
     })
+    .then(function(answer){
+        switch (key) {
+            case value:
+                
+                break;
+        
+            default:
+                break;
+        }
+    })
 }
