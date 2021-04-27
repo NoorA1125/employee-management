@@ -1,10 +1,6 @@
 /*caps not mandatory but helps with readability */
  -- Add departments, roles, employees
 
- -- View departments, roles, employees
-
- -- Update employee roles
-
 DROP DATABASE IF EXISTS employeeDB; /*Never in real practice */
 CREATE DATABASE employeeDB;
 

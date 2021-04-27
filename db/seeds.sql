@@ -24,9 +24,14 @@ INSERT INTO role(title, salary, department_ID) VALUES
 
 
 /*Employees*/
-INSERT INTO departments(name) VALUES
-("Finance"),
-("Marketing"),
-("Operations"),
-("Engineering"),
-("HR")
+INSERT INTO employees(first_name, last_name, role_ID, manager_ID, department_ID) VALUES
+("Noor", "Abdikadir", 7, NULL, 4),
+("Harun", "Abdi", 5, NULL, 3),
+("Halima", "Haji", 8, 1, 4),
+("Malyun", "Abdi", 1, NULL, 1),
+("Whitney", "Houston", 3, NULL, 2),
+("John", "Smith", 6, 2, 3),
+("Pedro", "Guitierez", 2, 4, 1),
+("Niomi", "Garcia", 4, 5, 2),
+("Okonkwo", "Dume", 9, NULL, 5),
+("Okonkwo", "Dume", 10, 9, 5),
