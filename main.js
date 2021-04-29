@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const figlet = require('figlet');
+const addEmployee = require('./addEmployee')
 const consoleTable = require('console.table') //Helps us display our application as a table in the console.
 
 //Custom console log text before application using Figlet. 2.0 - Success
