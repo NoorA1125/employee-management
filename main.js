@@ -123,3 +123,12 @@ function viewRoles() {
     })
 
 }
+
+function addEmployee(){
+    connection.query("SELECT * FROM role", () => (err, resRole) => {
+        if (err) throw err;
+        for (let i = 0; i < array.length; i++) {
+            const element = array[i];
+        }
+    })
+}
