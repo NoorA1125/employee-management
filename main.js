@@ -15,7 +15,7 @@ figlet('Employee Management System', function (err, data) {
 });
 
 //mysql connection
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
     host: "localhost",
     port: 3301,
     user: "root",
@@ -91,7 +91,7 @@ function startApp() {
 
 
 function viewEmployeesByDepartment() {
-    var query = `SELECT departments.name AS department, employees.id, employees.first_name, employees.last_name, 
+    const query = `SELECT departments.name AS department, employees.id, employees.first_name, employees.last_name, 
     role.title FROM employees LEFT JOIN role on employees.role_id = role.id LEFT JOIN departments departments on 
     role.department_id
      = departments.id WHERE departments.id;`;
@@ -103,7 +103,7 @@ function viewEmployeesByDepartment() {
 }
 
 function viewEmployees() {
-    var query = ` SELECT employees.id,employees.first_name, employees.last_name, 
+    const query = ` SELECT employees.id,employees.first_name, employees.last_name, 
     role.title, departments.name AS department, role.salary, CONACT(manager.first_name, ' ', manager.last_name) 
     AS Manager FROM employees LEFT JOIN role on employees.role_id = role.id LEFT JOIN departments on role.department_id = 
     departments.id LEFT JOIN employees manager on manager.id = employees.manager_id;`;
@@ -114,7 +114,7 @@ function viewEmployees() {
 }
 
 function viewDepartment() {
-    var query = `SELECT id AS department_id, name AS departments from departments;`;
+    const query = `SELECT id AS department_id, name AS departments from departments;`;
     connection.query(query, function (err, query) {
         console.table(query); //displays a table with the above data (employees, department, role & salary)
         startApp();
@@ -122,7 +122,7 @@ function viewDepartment() {
 }
 
 function viewRoles() {
-    var query = `SELECT id AS role_id, title, salary, salary AS salaries from role;`;
+    const query = `SELECT id AS role_id, title, salary, salary AS salaries from role;`;
     connection.query(query, function (err, query) {
         console.table(query); //displays a table with the above data (employees, department, role & salary)
         startApp();
@@ -130,63 +130,150 @@ function viewRoles() {
 
 }
 
-function addEmployee(){
-    var roleChoice = [];
+function addEmployee() {
+    const roleChoice = [];
     connection.query("SELECT * FROM role", () => (err, resRole) => {
         if (err) throw err;
         for (let i = 0; i < resRole.length; i++) {
-            var roleList = resRole[i].title;
+            const roleList = resRole[i].title;
             roleChoice.push(roleList);
         }
     })
-    var departmentChoice = [];
+    const departmentChoice = [];
     connection.query("SELECT * FROM departments", () => (err, resDepartment) => {
         if (err) throw err;
         for (let i = 0; i < resDepartment.length; i++) {
             let departmentList = resDepartment[i].name;
             departmentChoice.push(departmentList);
         }
-    })}
+    })
+}
 
 inquirer
     .prompt([
-    {
-      name: "firstName",
-      type: "input",
-      message: "Enter employee's first name:"
-    },
-    {
-      name: "lastName",
-      type: "input",
-      message: "Enter employee's last name:"
-    },
-    {
-      name: "role_id",
-      type: "rawlist",
-      message: "Select employee role:",
-      choices: roleChoice
-    },
-    {
-      name: "department_id",
-      type: "rawlist",
-      message: "Select employee's department:",
-      choices: departmentChoice
-    },
+        {
+            name: "firstName",
+            type: "input",
+            message: "Enter employee's first name:"
+        },
+        {
+            name: "lastName",
+            type: "input",
+            message: "Enter employee's last name:"
+        },
+        {
+            name: "role_id",
+            type: "rawlist",
+            message: "Select employee role:",
+            choices: roleChoice
+        },
+        {
+            name: "department_id",
+            type: "rawlist",
+            message: "Select employee's department:",
+            choices: departmentChoice
+        },
 
-  ])
-  .then(function(answer) {
-    //for loop to retun 
-    const chosenRole;
-      for (let i = 0; i < resRole.length; i++) {
-        if (resRole[i].title === answer.role_id) {
-          chosenRole = resRole[i];
+    ])
+    .then(function (answer) {
+        //for loop to retun 
+        const chosenRole;
+        for (let i = 0; i < resRole.length; i++) {
+            if (resRole[i].title === answer.role_id) {
+                chosenRole = resRole[i];
+            }
         }
-      }
 
-      const chosenDepartment;
-      for (let i = 0; i < resDept.length; i++) {
-        if (resDepartment[i].name === answer.department_id) {
-            chosenDepartment = resDepartment[i];
+        const chosenDepartment;
+        for (let i = 0; i < resDept.length; i++) {
+            if (resDepartment[i].name === answer.department_id) {
+                chosenDepartment = resDepartment[i];
+            }
         }
-      }
     });
+
+connection.query(
+    "INSERT INTO employees SET ?",
+    {
+        first_name: answer.firstName,
+        last_name: answer.lastName,
+        role_id: chosenRole.id,
+        department_id: chosenDept.id
+    },
+    function (err) {
+        if (err) throw err;
+        console.log("Employee " + answer.firstName + " " + answer.lastName + " successfully added!");
+        startApp();
+    }
+);
+
+//adding the department
+function AddDepartment() {
+    inquirer
+        .prompt([{
+            name: "department",
+            type: "input",
+            message: "Enter new departments name: "
+        }
+        ]).then(function (answer) {
+            connection.query("INSERT INTO departments SET?"),
+                { name: answer.department },
+                function (err) {
+                    if (err) throw err;
+                    console.log("Department " + answer.department + " successfully added!");
+                    startApp();
+                }
+        })
+}
+
+function addRole() {
+    const departmentChoice = [];
+    connection.query("SELECT * FROM departments", function (err, resDepartment) {
+        if (err) throw err;
+        for (let i = 0; i < resDepartment.length; i++) {
+            let departmentList = resDeparmentt[i].name;
+            departmentChoice.push(departmenttList);
+        }
+        inquirer
+            .prompt([
+                {
+                    name: "title",
+                    type: "input",
+                    message: "Enter new role's name:"
+                },
+                {
+                    name: "salary",
+                    type: "number",
+                    message: "Enter new role's salary:"
+                },
+                {
+                    name: "department_id",
+                    type: "rawlist",
+                    message: "Select employee's department:",
+                    choices: departmentChoice
+                }
+            ]).then(function (answer) {
+
+                const chosenDepartment;
+                for (let i = 0; i < resDepartment.length; i++) {
+                    if (resDepartment[i].name === answer.department_id) {
+                        chosenDepartment = resDepartment[i];
+                    }
+                };
+
+                connection.query(
+                    "INSERT INTO role SET ?",
+                    {
+                        title: answer.title,
+                        salary: answer.salary,
+                        department_id: chosenDept.id
+                    },
+                    function (err) {
+                        if (err) throw err;
+                        console.log("New role " + answer.title + " successfully added!");
+                        startApp();
+                    }
+                );
+            });
+    })
+}
