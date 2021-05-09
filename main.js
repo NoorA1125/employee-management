@@ -239,8 +239,8 @@ function addRole() {
     connection.query("SELECT * FROM departments", function (err, resDepartment) {
         if (err) throw err;
         for (var i = 0; i < resDepartment.length; i++) {
-            let departmentList = resDeparmentt[i].name;
-            departmentChoice.push(departmenttList);
+            let departmentList = resDepartment[i].name;
+            departmentChoice.push(departmentList);
         }
         inquirer
             .prompt([
@@ -289,10 +289,10 @@ function addRole() {
 //now lets remove an employee
 function removeEmployee() {
     const employeeChoice = [];
-      connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function(err, resEmployeeloyee) {
+      connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function(err, resEmployee) {
         if (err) throw err;
-        for (var i = 0; i < resEmployeeloyee.length; i++) {
-          const employeeList = resEmployeeloyee[i].name;
+        for (var i = 0; i < resEmployee.length; i++) {
+          const employeeList = resEmployee[i].name;
           employeeChoice.push(employeeList);
       };
   
@@ -308,9 +308,9 @@ function removeEmployee() {
     .then(function(answer) {
   
       var chosenEmployee;
-          for (var i = 0; i < resEmployeeloyee.length; i++) {
-            if (resEmployeeloyee[i].name === answer.employee_id) {
-              chosenEmployee = resEmployeeloyee[i];
+          for (var i = 0; i < resEmployee.length; i++) {
+            if (resEmployee[i].name === answer.employee_id) {
+              chosenEmployee = resEmployee[i];
           }
         };
   
@@ -330,9 +330,9 @@ function removeEmployee() {
 
 function updateEmployeeRole() {
     const employeeChoice = [];
-    connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function (err, resEmployeeloyee) {
+    connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function (err, resEmployee) {
         if (err) throw err;
-        for (var i = 0; i < resEmployeeloyee.length; i++) {
+        for (var i = 0; i < resEmployee.length; i++) {
             const employeeList = array[i].name;
             employeeChoice.push(employeeList)
 
@@ -361,8 +361,8 @@ function updateEmployeeRole() {
                     }
                 ]).then(function (answer) {
                     var chosenEmployee;
-                    for (var i = 0; i < resEmployeeloyee.length; i++) {
-                        chosenEmployee = resEmployeeloyee[i]
+                    for (var i = 0; i < resEmployee.length; i++) {
+                        chosenEmployee = resEmployee[i]
                     }
                 });
             var chosenRole;
