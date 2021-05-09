@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const figlet = require('figlet');
-const addEmployee = require('./addEmployee')
+// const addEmployee = require('./addEmployee')
 const consoleTable = require('console.table') //Helps us display our application as a table in the console.
 
 //Custom console log text before application using Figlet. 2.0 - Success
@@ -131,81 +131,83 @@ function viewRoles() {
 }
 
 function addEmployee() {
-    const roleChoice = [];
-    connection.query("SELECT * FROM role", () => (err, resRole) => {
-        if (err) throw err;
-        for (var i = 0; i < resRole.length; i++) {
-            const roleList = resRole[i].title;
-            roleChoice.push(roleList);
-        }
-    })
-    const departmentChoice = [];
-    connection.query("SELECT * FROM departments", () => (err, resDepartment) => {
+    //arrays to display prompt choices from database items 
+    var roleChoice = [];
+    connection.query("SELECT * FROM role", function(err, resRole) {
+      if (err) throw err;
+      for (var i = 0; i < resRole.length; i++) {
+        var roleList = resRole[i].title;
+        roleChoice.push(roleList);
+      };
+  
+      var departmentChoice = [];
+      connection.query("SELECT * FROM departments", function(err, resDepartment) {
         if (err) throw err;
         for (var i = 0; i < resDepartment.length; i++) {
-            let departmentList = resDepartment[i].name;
-            departmentChoice.push(departmentList);
-        }
-    })
-}
-
-inquirer
-    .prompt([
-        {
-            name: "firstName",
-            type: "input",
-            message: "Enter employee's first name:"
-        },
-        {
-            name: "lastName",
-            type: "input",
-            message: "Enter employee's last name:"
-        },
-        {
-            name: "role_id",
-            type: "rawlist",
-            message: "Select employee role:",
-            choices: roleChoice
-        },
-        {
-            name: "department_id",
-            type: "rawlist",
-            message: "Select employee's department:",
-            choices: departmentChoice
-        },
-
+          var departmentList = resDepartment[i].name;
+          departmentChoice.push(departmentList);
+      }
+      
+    inquirer
+      .prompt([
+      {
+        name: "firstName",
+        type: "input",
+        message: "Enter employee's first name:"
+      },
+      {
+        name: "lastName",
+        type: "input",
+        message: "Enter employee's last name:"
+      },
+      {
+        name: "role_id",
+        type: "rawlist",
+        message: "Select employee role:",
+        choices: roleChoice
+      },
+      {
+        name: "department_id",
+        type: "rawlist",
+        message: "Select employee's department:",
+        choices: departmentChoice
+      },
+  
     ])
-    .then(function (answer) {
+      .then(function(answer) {
         //for loop to retun 
-        const chosenRole;
-        for (var i = 0; i < resRole.length; i++) {
+        var chosenRole;
+          for (var i = 0; i < resRole.length; i++) {
             if (resRole[i].title === answer.role_id) {
-                chosenRole = resRole[i];
+              chosenRole = resRole[i];
             }
-        }
-
-        const chosenDepartment;
-        for (var i = 0; i < resDept.length; i++) {
+          };
+  
+          var chosenDepartment;
+          for (var i = 0; i < resDepartment.length; i++) {
             if (resDepartment[i].name === answer.department_id) {
-                chosenDepartment = resDepartment[i];
+              chosenDepartment = resDepartment[i];
             }
-        }
-    });
-
-connection.query(
-    "INSERT INTO employees SET ?",
-    {
-        first_name: answer.firstName,
-        last_name: answer.lastName,
-        role_id: chosenRole.id,
-        department_id: chosenDept.id
-    },
-    function (err) {
-        if (err) throw err;
-        console.log("Employee " + answer.firstName + " " + answer.lastName + " successfully added!");
-        startApp();
-    }
-);
+          };
+        //connection to insert response into database  
+        connection.query(
+          "INSERT INTO employees SET ?",
+          {
+            first_name: answer.firstName,
+            last_name: answer.lastName,
+            role_id: chosenRole.id,
+            department_id: chosenDepartment.id
+          },
+          function(err) {
+            if (err) throw err;
+            console.log("Employee " + answer.firstName + " " + answer.lastName + " successfully added!");
+            startApp();
+          }
+        );
+      })
+     });
+    })
+  };
 
 //adding the department
 function AddDepartment() {
@@ -254,7 +256,7 @@ function addRole() {
                 }
             ]).then(function (answer) {
 
-                const chosenDepartment;
+                var chosenDepartment;
                 for (var i = 0; i < resDepartment.length; i++) {
                     if (resDepartment[i].name === answer.department_id) {
                         chosenDepartment = resDepartment[i];
@@ -266,7 +268,7 @@ function addRole() {
                     {
                         title: answer.title,
                         salary: answer.salary,
-                        department_id: chosenDept.id
+                        department_id: chosenDepartment.id
                     },
                     function (err) {
                         if (err) throw err;
@@ -281,41 +283,44 @@ function addRole() {
 //now lets remove an employee
 function removeEmployee() {
     const employeeChoice = [];
-    connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function (err, employeeChoice){
+      connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function(err, resEmployee) {
         if (err) throw err;
-        for (var i = 0; resEmployee.length; i++) {
-            let employeeList = resEmployee[i].name;
-            employeeChoice.push(empList);
+        for (var i = 0; i < resEmployee.length; i++) {
+          const employeeList = resEmployee[i].name;
+          employeeChoice.push(employeeList);
+      };
+  
+    inquirer
+      .prompt([
+        {
+          name: "employee_id",
+          type: "rawlist",
+          message: "Select the employee you would like to remove:",
+          choices: employeeChoice
+        },
+    ])
+    .then(function(answer) {
+  
+      var chosenEmployee;
+          for (var i = 0; i < resEmployee.length; i++) {
+            if (resEmployee[i].name === answer.employee_id) {
+              chosenEmployee = resEmployee[i];
+          }
         };
-        inquirer
-            .prompt([
-                {
-                    name: "employee_id",
-                    type: "rawlist",
-                    message: "Select the employee you would like to remove:",
-                    choices: employeeChoice
-                },
-            ]).then(function (answer) {
-                const chosenEmployee;
-                for (var i = 0; i < resEmployee.length; i++) {
-                    if (resEmployee[i].name === answer.employee_id) {
-                        chosenEmployee = resEmployee[i];
-                    }
-                };
-
-                connection.query(
-                    "DELETE FROM employee WHERE id=?",
-                    [chosenEmployee.id],
-                    function (err) {
-                        if (err) throw err;
-                        console.log("Employee successfully removed!");
-                        startApp();
-                    }
-                )
-            })
-        
-    }
-}
+  
+      connection.query(
+        "DELETE FROM employees WHERE id=?",
+        [chosenEmployee.id],
+  
+        function(err) {
+          if (err) throw err;
+          console.log("Employee successfully removed!");
+          startApp();
+        }
+      );
+     });
+    })
+  };
 
 function updateEmployeeRole() {
     const employeeChoice = [];
@@ -349,7 +354,7 @@ function updateEmployeeRole() {
                         choices: roleChoice
                     }
                 ]).then(function (answer) {
-                    const chosenEmployee;
+                    var chosenEmployee;
                     for (var i = 0; i < resEmployee.length; i++) {
                         chosenEmployee = resEmployee[i]
                     }
