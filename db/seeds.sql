@@ -33,6 +33,6 @@ INSERT INTO employees(first_name, last_name, role_id, manager_id, department_id)
 ("Pedro", "Guitierez", 2, 4, 1),
 ("Niomi", "Garcia", 4, 5, 2),
 ("Okonkwo", "Dume", 9, NULL, 5),
-("Okonkwo", "Dume", 10, 9, 5),
+("Kim", "Brown", 10, 9, 5),
 
  
