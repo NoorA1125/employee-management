@@ -91,7 +91,10 @@ function startApp() {
 
 
 function viewEmployeesByDepartment() {
-    var query = `SELECT departments.name AS department, employees.id, employees.first_name, employees.last_name, role.title FROM employees LEFT JOIN role on employees.role_ID = role.id LEFT JOIN departments departments on role.department_ID = departments.id WHERE departments.id;`;
+    var query = `SELECT departments.name AS department, employees.id, employees.first_name, employees.last_name, 
+    role.title FROM employees LEFT JOIN role on employees.role_id = role.id LEFT JOIN departments departments on 
+    role.department_id
+     = departments.id WHERE departments.id;`;
     connection.query(query, function (err, query) {
         console.table(query); //displays a table with the above data (employees, department, role & salary)
         startApp();
@@ -100,7 +103,10 @@ function viewEmployeesByDepartment() {
 }
 
 function viewEmployees() {
-    var query = ` SELECT employees.id,employees.first_name, employees.last_name, role.title, departments.name AS department, role.salary, CONACT(manager.first_name, ' ', manager.last_name) AS Manager FROM employees LEFT JOIN role on employees.role_ID = role.id LEFT JOIN departments on role.department_ID = departments.id LEFT JOIN employees manager on manager.id = employees.manager_ID;`;
+    var query = ` SELECT employees.id,employees.first_name, employees.last_name, 
+    role.title, departments.name AS department, role.salary, CONACT(manager.first_name, ' ', manager.last_name) 
+    AS Manager FROM employees LEFT JOIN role on employees.role_id = role.id LEFT JOIN departments on role.department_id = 
+    departments.id LEFT JOIN employees manager on manager.id = employees.manager_id;`;
     connection.query(query, function (err, query) {
         console.table(query); //displays a table with the above data (employees, department, role & salary)
         startApp();
@@ -108,7 +114,7 @@ function viewEmployees() {
 }
 
 function viewDepartment() {
-    var query = `SELECT id AS department_ID, name AS departments from departments;`;
+    var query = `SELECT id AS department_id, name AS departments from departments;`;
     connection.query(query, function (err, query) {
         console.table(query); //displays a table with the above data (employees, department, role & salary)
         startApp();
@@ -116,7 +122,7 @@ function viewDepartment() {
 }
 
 function viewRoles() {
-    var query = `SELECT id AS role_ID, title, salary, salary AS salaries from role;`;
+    var query = `SELECT id AS role_id, title, salary, salary AS salaries from role;`;
     connection.query(query, function (err, query) {
         console.table(query); //displays a table with the above data (employees, department, role & salary)
         startApp();
@@ -125,10 +131,62 @@ function viewRoles() {
 }
 
 function addEmployee(){
+    var roleChoice = [];
     connection.query("SELECT * FROM role", () => (err, resRole) => {
         if (err) throw err;
-        for (let i = 0; i < array.length; i++) {
-            const element = array[i];
+        for (let i = 0; i < resRole.length; i++) {
+            var roleList = resRole[i].title;
+            roleChoice.push(roleList);
         }
     })
-}
+    var departmentChoice = [];
+    connection.query("SELECT * FROM departments", () => (err, resDepartment) => {
+        if (err) throw err;
+        for (let i = 0; i < resDepartment.length; i++) {
+            let departmentList = resDepartment[i].name;
+            departmentChoice.push(departmentList);
+        }
+    })}
+
+inquirer
+    .prompt([
+    {
+      name: "firstName",
+      type: "input",
+      message: "Enter employee's first name:"
+    },
+    {
+      name: "lastName",
+      type: "input",
+      message: "Enter employee's last name:"
+    },
+    {
+      name: "role_id",
+      type: "rawlist",
+      message: "Select employee role:",
+      choices: roleChoice
+    },
+    {
+      name: "department_id",
+      type: "rawlist",
+      message: "Select employee's department:",
+      choices: departmentChoice
+    },
+
+  ])
+  .then(function(answer) {
+    //for loop to retun 
+    const chosenRole;
+      for (let i = 0; i < resRole.length; i++) {
+        if (resRole[i].title === answer.role_id) {
+          chosenRole = resRole[i];
+        }
+      }
+
+      const chosenDepartment;
+      for (let i = 0; i < resDept.length; i++) {
+        if (resDepartment[i].name === answer.department_id) {
+            chosenDepartment = resDepartment[i];
+        }
+      }
+    });
