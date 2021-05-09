@@ -134,7 +134,7 @@ function addEmployee() {
     const roleChoice = [];
     connection.query("SELECT * FROM role", () => (err, resRole) => {
         if (err) throw err;
-        for (let i = 0; i < resRole.length; i++) {
+        for (var i = 0; i < resRole.length; i++) {
             const roleList = resRole[i].title;
             roleChoice.push(roleList);
         }
@@ -142,7 +142,7 @@ function addEmployee() {
     const departmentChoice = [];
     connection.query("SELECT * FROM departments", () => (err, resDepartment) => {
         if (err) throw err;
-        for (let i = 0; i < resDepartment.length; i++) {
+        for (var i = 0; i < resDepartment.length; i++) {
             let departmentList = resDepartment[i].name;
             departmentChoice.push(departmentList);
         }
@@ -178,14 +178,14 @@ inquirer
     .then(function (answer) {
         //for loop to retun 
         const chosenRole;
-        for (let i = 0; i < resRole.length; i++) {
+        for (var i = 0; i < resRole.length; i++) {
             if (resRole[i].title === answer.role_id) {
                 chosenRole = resRole[i];
             }
         }
 
         const chosenDepartment;
-        for (let i = 0; i < resDept.length; i++) {
+        for (var i = 0; i < resDept.length; i++) {
             if (resDepartment[i].name === answer.department_id) {
                 chosenDepartment = resDepartment[i];
             }
@@ -230,7 +230,7 @@ function addRole() {
     const departmentChoice = [];
     connection.query("SELECT * FROM departments", function (err, resDepartment) {
         if (err) throw err;
-        for (let i = 0; i < resDepartment.length; i++) {
+        for (var i = 0; i < resDepartment.length; i++) {
             let departmentList = resDeparmentt[i].name;
             departmentChoice.push(departmenttList);
         }
@@ -255,7 +255,7 @@ function addRole() {
             ]).then(function (answer) {
 
                 const chosenDepartment;
-                for (let i = 0; i < resDepartment.length; i++) {
+                for (var i = 0; i < resDepartment.length; i++) {
                     if (resDepartment[i].name === answer.department_id) {
                         chosenDepartment = resDepartment[i];
                     }
@@ -281,36 +281,94 @@ function addRole() {
 //now lets remove an employee
 function removeEmployee() {
     const employeeChoice = [];
-    connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function (err, employeeChoice))
-    if (err) throw err;
-    for (let i = 0; resEmployee.length; i++) {
-        let employeeList = resEmployee[i].name;
-        employeeChoice.push(empList);
-    };
-    inquirer
-        .prompt([
-            {
-                name: "employee_id",
-                type: "rawlist",
-                message: "Select the employee you would like to remove:",
-                choices: employeeChoice
-            },
-        ]).then(function (answer) {
-            const chosenEmployee;
-            for (var i = 0; i < resEmployee.length; i++) {
-                if (resEmployee[i].name === answer.employee_id) {
-                    chosenEmployee = resEmployee[i];
-                }
+    connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function (err, employeeChoice){
+        if (err) throw err;
+        for (var i = 0; resEmployee.length; i++) {
+            let employeeList = resEmployee[i].name;
+            employeeChoice.push(empList);
+        };
+        inquirer
+            .prompt([
+                {
+                    name: "employee_id",
+                    type: "rawlist",
+                    message: "Select the employee you would like to remove:",
+                    choices: employeeChoice
+                },
+            ]).then(function (answer) {
+                const chosenEmployee;
+                for (var i = 0; i < resEmployee.length; i++) {
+                    if (resEmployee[i].name === answer.employee_id) {
+                        chosenEmployee = resEmployee[i];
+                    }
+                };
+
+                connection.query(
+                    "DELETE FROM employee WHERE id=?",
+                    [chosenEmployee.id],
+                    function (err) {
+                        if (err) throw err;
+                        console.log("Employee successfully removed!");
+                        startApp();
+                    }
+                )
+            })
+        
+    }
+}
+
+function updateEmployeeRole() {
+    const employeeChoice = [];
+    connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function (err, resEmployee) {
+        if (err) throw err;
+        for (var i = 0; i < resEmployee.length; i++) {
+            const employeeList = array[i].name;
+            employeeChoice.push(employeeList)
+
+        };
+        var roleChoice = [];
+        connection.query("SELECT * FROM role", function (err, resRole) {
+            if (err) throw err;
+            for (var i = 0; i < resRole.length; i++) {
+                const roleList = resRole[i].title;
+                roleChoice.push(roleList);
             };
 
+            inquirer
+                .prompt([
+                    {
+                        name: "employee_id",
+                        type: "rawlist",
+                        message: "Select the employee you would like to update:",
+                        choices: employeeChoice
+                    },
+                    {
+                        name: "role_id",
+                        type: "rawlist",
+                        message: "Select employee's new role:",
+                        choices: roleChoice
+                    }
+                ]).then(function (answer) {
+                    const chosenEmployee;
+                    for (var i = 0; i < resEmployee.length; i++) {
+                        chosenEmployee = resEmployee[i]
+                    }
+                });
+            var chosenRole;
+            for (var i = 0; i < resRole.length; i++) {
+                if (resRole[i].title === answer.role_id) {
+                    chosenRole = resRole[i];
+                }
+            };
             connection.query(
-                "DELETE FROM employee WHERE id=?",
-                [chosenEmployee.id],
+                "UPDATE employees SET role_id = ? WHERE id = ?",
+                [chosenRole.id, chosenEmployee.id],
                 function (err) {
                     if (err) throw err;
-                    console.log("Employee successfully removed!");
+                    console.log("Employee new role successfully updated!");
                     startApp();
                 }
-            )
+            );
         })
+    })
 }
