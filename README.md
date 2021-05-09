@@ -4,7 +4,13 @@ Created an interface that makes it easy for non-developers to view and interact 
 
 ## Instructions
 
-Design the following database schema containing three tables:
+The app uses node, inquirer, console.table and MySQL (& Also figlet for the cool star trek like feature). 
+So you, the user, will need to intall the all dependancies by running 
+```npm install -y```.
+
+Then, since everything is in one file, the "main.js" file,
+Open console and run node: 
+```node main.js```
 
 ![Database Schema](Assets/schema.png)
 
