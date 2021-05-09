@@ -16,18 +16,24 @@ figlet('Employee Management System', function (err, data) {
 //mysql connection
 const connection = mysql.createConnection({
     host: "localhost",
-    port: 3000,
+  
+    // Your port; if not 3306
+    port: 3306,
+  
+    // Your username
     user: "root",
+  
+    // Your password
     password: "Welcome@2020!",
-    database: "employeeDB"
-});
-
-connection.connect(function(err) {
-    if (err) throw err;
-    startApp();
+    database: "employeeDb"
   });
+  
+  connection.connect(function(err) {
+      if (err) throw err;
+      startApp();
+    });
 
-//check for error else start application
+// //check for error else start application
 
 function startApp() {
     inquirer
