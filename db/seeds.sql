@@ -8,10 +8,9 @@ INSERT INTO departments(name) VALUES
 ("Engineering"),
 ("HR");
 
-
 /*Roles*/
-INSERT INTO role(title, salary, department_ID) VALUES
-("Accountant Manager", 100000, 1), --role, salary, employee count
+INSERT INTO role(title, salary, department_id) VALUES
+("Accountant Manager", 100000, 1), 
 ("Financial Associate", 62000,1),
 ("Sales Manager", 90000, 2),
 ("Sales Associate", 50000, 2),
@@ -24,11 +23,11 @@ INSERT INTO role(title, salary, department_ID) VALUES
 
 
 /*Employees*/
-INSERT INTO employees(first_name, last_name, role_ID, manager_ID, department_ID) VALUES
+INSERT INTO employees(first_name, last_name, role_id, manager_id, department_id) VALUES
 ("Noor", "Abdikadir", 7, NULL, 4),
 ("Harun", "Abdi", 5, NULL, 3),
 ("Halima", "Haji", 8, 1, 4),
-("Malyun", "Abdi", 1, NULL, 1),
+("Malyun", "Abdi", 1, NULL, 2),
 ("Whitney", "Houston", 3, NULL, 2),
 ("John", "Smith", 6, 2, 3),
 ("Pedro", "Guitierez", 2, 4, 1),

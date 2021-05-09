@@ -1,7 +1,6 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const figlet = require('figlet');
-// const addEmployee = require('./addEmployee')
 const consoleTable = require('console.table') //Helps us display our application as a table in the console.
 
 //Custom console log text before application using Figlet. 2.0 - Success
@@ -17,17 +16,18 @@ figlet('Employee Management System', function (err, data) {
 //mysql connection
 const connection = mysql.createConnection({
     host: "localhost",
-    port: 3301,
+    port: 3000,
     user: "root",
-    password: "",
+    password: "Welcome@2020!",
     database: "employeeDB"
 });
 
-//check for error else start application
-connection.connect(() => (err) => {
+connection.connect(function(err) {
     if (err) throw err;
     startApp();
-});
+  });
+
+//check for error else start application
 
 function startApp() {
     inquirer
@@ -86,7 +86,7 @@ function startApp() {
                     console.log("Thanks for using our Employee Management System!")
                     process.exit();
             }
-        })
+        });
 }
 
 
@@ -96,11 +96,11 @@ function viewEmployeesByDepartment() {
     role.department_id
      = departments.id WHERE departments.id;`;
     connection.query(query, function (err, query) {
-        console.table(query); //displays a table with the above data (employees, department, role & salary)
+        console.table(query); 
         startApp();
-    })
+    });
 
-}
+};
 
 function viewEmployees() {
     const query = ` SELECT employees.id,employees.first_name, employees.last_name, 
@@ -108,27 +108,27 @@ function viewEmployees() {
     AS Manager FROM employees LEFT JOIN role on employees.role_id = role.id LEFT JOIN departments on role.department_id = 
     departments.id LEFT JOIN employees manager on manager.id = employees.manager_id;`;
     connection.query(query, function (err, query) {
-        console.table(query); //displays a table with the above data (employees, department, role & salary)
+        console.table(query); 
         startApp();
-    })
-}
+    });
+};
 
 function viewDepartment() {
     const query = `SELECT id AS department_id, name AS departments from departments;`;
     connection.query(query, function (err, query) {
-        console.table(query); //displays a table with the above data (employees, department, role & salary)
+        console.table(query); 
         startApp();
-    })
-}
+    });
+};
 
 function viewRoles() {
     const query = `SELECT id AS role_id, title, salary, salary AS salaries from role;`;
     connection.query(query, function (err, query) {
-        console.table(query); //displays a table with the above data (employees, department, role & salary)
+        console.table(query); 
         startApp();
-    })
+    });
 
-}
+};
 
 function addEmployee() {
     //arrays to display prompt choices from database items 
@@ -283,10 +283,10 @@ function addRole() {
 //now lets remove an employee
 function removeEmployee() {
     const employeeChoice = [];
-      connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function(err, resEmployee) {
+      connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function(err, resEmployeeloyee) {
         if (err) throw err;
-        for (var i = 0; i < resEmployee.length; i++) {
-          const employeeList = resEmployee[i].name;
+        for (var i = 0; i < resEmployeeloyee.length; i++) {
+          const employeeList = resEmployeeloyee[i].name;
           employeeChoice.push(employeeList);
       };
   
@@ -302,9 +302,9 @@ function removeEmployee() {
     .then(function(answer) {
   
       var chosenEmployee;
-          for (var i = 0; i < resEmployee.length; i++) {
-            if (resEmployee[i].name === answer.employee_id) {
-              chosenEmployee = resEmployee[i];
+          for (var i = 0; i < resEmployeeloyee.length; i++) {
+            if (resEmployeeloyee[i].name === answer.employee_id) {
+              chosenEmployee = resEmployeeloyee[i];
           }
         };
   
@@ -324,9 +324,9 @@ function removeEmployee() {
 
 function updateEmployeeRole() {
     const employeeChoice = [];
-    connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function (err, resEmployee) {
+    connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function (err, resEmployeeloyee) {
         if (err) throw err;
-        for (var i = 0; i < resEmployee.length; i++) {
+        for (var i = 0; i < resEmployeeloyee.length; i++) {
             const employeeList = array[i].name;
             employeeChoice.push(employeeList)
 
@@ -355,8 +355,8 @@ function updateEmployeeRole() {
                     }
                 ]).then(function (answer) {
                     var chosenEmployee;
-                    for (var i = 0; i < resEmployee.length; i++) {
-                        chosenEmployee = resEmployee[i]
+                    for (var i = 0; i < resEmployeeloyee.length; i++) {
+                        chosenEmployee = resEmployeeloyee[i]
                     }
                 });
             var chosenRole;
@@ -377,3 +377,57 @@ function updateEmployeeRole() {
         })
     })
 }
+
+//Function to update employee manager
+function updateEmployeeMng() {
+    var employeeChoice = [];
+      connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employees", function(err, resEmployee) {
+        if (err) throw err;
+        for (var i = 0; i < resEmployee.length; i++) {
+          var empList = resEmployee[i].name;
+          employeeChoice.push(empList);
+      };
+  
+      inquirer
+      .prompt([
+      {
+        name:"employees",
+        type: "rawlist",
+        message: "Select employee you would like to update manager:",
+        choices: employeeChoice
+      },
+      {
+        name: "Managerid",
+        type: "rawlist",
+        message: "Select Manager among employees:",
+        choices: employeeChoice
+      }
+    ])
+    .then(function(answer) {
+  
+      var chosenEmployee;
+          for (var i = 0; i < resEmployee.length; i++) {
+            if (resEmployee[i].name === answer.employees) {
+              chosenEmployee = resEmployee[i];
+          }
+        };
+        var chosenManager;
+          for (var i = 0; i < resEmployee.length; i++) {
+            if (resEmployee[i].name === answer.Managerid) {
+              chosenManager = resEmployee[i];
+          }
+        };
+        connection.query(
+          "UPDATE employees SET manager_id = ? WHERE id = ?",
+  
+          [chosenManager.id, chosenEmployee.id],
+          function(err) {
+            if (err) throw err;
+            console.log("Employee Manager successfully updated!");
+            startApp();
+          }
+        );
+      })
+     })
+  };
+  
